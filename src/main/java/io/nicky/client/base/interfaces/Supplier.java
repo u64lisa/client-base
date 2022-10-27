@@ -1,7 +1,3 @@
+// @formatter:off
 package io.nicky.client.base.interfaces;
-
-public interface Supplier<T> {
-
-    T supply();
-
-}
+public interface Supplier<T> { T supply(); }

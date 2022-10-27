@@ -5,9 +5,7 @@ import io.nicky.client.base.interfaces.Supplier;
 
 /**
  * The type Listener entry.
- *
  * @param <T> the type parameter
  */
-public record ListenerEntry<T extends Event>(long elementId, Class<T> element,
-                                             Supplier<Boolean> supplier, Callback<T> event) {
-}
+// @formatter:off
+public record ListenerEntry<T extends Event>(long elementId, Class<T> element, Supplier<Boolean> supplier, Callback<T> event) {}

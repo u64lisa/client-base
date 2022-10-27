@@ -9,7 +9,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Position {
-
     TargetType type() default TargetType.HEAD;
 
     String target() default "";
@@ -20,5 +19,4 @@ public @interface Position {
         BEFORE,
         AFTER
     }
-
 }

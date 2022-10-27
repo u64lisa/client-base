@@ -1,6 +1,5 @@
+// @formatter:off
 package io.nicky.client.base.event;
 
-/**
- * The interface Event.
- */
-public interface Event { }
+/** The event-interface. */
+public interface Event {}

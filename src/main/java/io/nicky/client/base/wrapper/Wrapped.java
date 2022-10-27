@@ -7,7 +7,5 @@ import java.lang.annotation.*;
 @SuppressWarnings("unused")
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Wrapped {
-
     String original();
-
 }
