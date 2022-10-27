@@ -7,8 +7,6 @@ import java.lang.annotation.*;
 @SuppressWarnings("unused")
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inject {
-
     String className() default "none";
     Class<?> clazz() default Inject.class;
-
 }

@@ -7,9 +7,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Detour {
-
     String[] method();
     Position position() default @Position;
     boolean cancellable() default false;
-
 }

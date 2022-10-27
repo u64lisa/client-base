@@ -1,7 +1,6 @@
 package io.nicky.client.base.transformation.targets;
 
 public enum TargetType {
-
     HEAD("HEAD"),
     RETURN("RETURN"),
     THROW("THROW"),

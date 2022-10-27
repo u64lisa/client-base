@@ -18,28 +18,19 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("all")
 public final class EventBus implements IEventBus {
-
+    final Consumer<BusDebuggingEvent<? extends Event>> debuggingEventConsumer = event -> {
+        /* The debugging event consumer. :> */
+    };
     private final List<ListenerEntry<? extends Event>> eventListener = new ArrayList<>();
     private final List<ListenerEntry<? extends Event>> alwaysCancelledEvents = new ArrayList<>();
-
     private final Random random = ThreadLocalRandom.current();
-
     private final Counter counter = new Counter(100);
-
-    /**
-     * The Debugging event consumer.
-     */
-    final Consumer<BusDebuggingEvent<? extends Event>> debuggingEventConsumer = event -> {
-    };
 
     @Override
     public <T extends Event> void registerListener(final Class<T> element, final Supplier<Boolean> supplier, final Callback<T> event) {
         final int currentCount = this.counter.getAndIncrease();
         final long currentId = random.nextLong(10, currentCount);
-
-        final ListenerEntry<T> listenerEntry = new ListenerEntry<>(
-                currentId, element, supplier, event);
-
+        final ListenerEntry<T> listenerEntry = new ListenerEntry<>(currentId, element, supplier, event);
         this.eventListener.add(listenerEntry);
     }
 
@@ -55,46 +46,37 @@ public final class EventBus implements IEventBus {
     }
 
     @Override
-    public <T extends Event> T releaseEvent(T event) {
+    public <T extends Event> T releaseEvent(final T event) {
         if (event == null)
             return event;
 
         this.debuggingEventConsumer.accept(new BusDebuggingEvent<>(event));
 
-        for (ListenerEntry<? extends Event> listenerEntry : this.eventListener) {
-            if (listenerEntry.event() == null)
-                continue;
-
-            if (!listenerEntry.element().getName().equalsIgnoreCase(event.getClass().getName()))
-                continue;
-
-            if (!listenerEntry.supplier().supply())
-                continue;
-
+        for (final ListenerEntry<? extends Event> listenerEntry : this.eventListener) {
+            if (
+                    listenerEntry.event() == null ||
+                            !listenerEntry.element().getName().equalsIgnoreCase(event.getClass().getName()) ||
+                            !listenerEntry.supplier().supply()
+            ) continue;
             listenerEntry.event().accept(Cast.perform(event));
         }
 
-        for (ListenerEntry<? extends Event> alwaysCancelledEvent : alwaysCancelledEvents) {
-
-        }
-
+        for (ListenerEntry<? extends Event> alwaysCancelledEvent : alwaysCancelledEvents) {} // TODO: ?
         return event;
     }
 
     @Override
     @SafeVarargs
-    public final <T extends Event> void multiCancel(T... elements) {
+    public final <T extends Event> void multiCancel(final T... elements) {
         final int currentCount = this.counter.getAndIncrease();
         final long currentId = random.nextLong(10, currentCount);
-
         Arrays.stream(elements)
                 .filter(t -> t instanceof Cancelable)
                 .map(t -> (Cancelable) t)
                 .forEachOrdered(cancelable -> this.alwaysCancelledEvents.add(new ListenerEntry<>(currentId,
-                        Cast.perform(cancelable.getClass()), () -> true, element -> {
-                    if (element instanceof Cancelable current)
-                        current.setCanceled();
-                })));
+                        Cast.perform(cancelable.getClass()), () -> true,
+                        element -> ((Cancelable) element).setCanceled()
+                )));
     }
 
     @Override
@@ -102,5 +84,4 @@ public final class EventBus implements IEventBus {
         this.eventListener.clear();
         this.alwaysCancelledEvents.clear();
     }
-
 }

@@ -8,7 +8,6 @@ import io.nicky.client.base.interfaces.Supplier;
  */
 @SuppressWarnings({"all"})
 public interface IEventBus {
-
     /**
      * Register listener.
      *

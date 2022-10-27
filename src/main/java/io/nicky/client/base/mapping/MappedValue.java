@@ -4,7 +4,6 @@ import io.nicky.client.base.interfaces.Callback;
 import io.nicky.client.base.interfaces.Supplier;
 
 public final class MappedValue<Value> {
-
     private Callback<Value> valueChanger;
     private Supplier<Value> valueCallback;
 
@@ -21,28 +20,22 @@ public final class MappedValue<Value> {
     }
 
     public MappedValue<Value> build() {
-        if (valueCallback != null)
-            this.defaultValue = this.valueCallback.supply();
-
+        if (valueCallback != null) this.defaultValue = this.valueCallback.supply();
         if (this.valueCallback == null || this.valueChanger == null)
             throw new IllegalStateException("Missing Resolve method or Update method");
-
         return this;
-    }
-
-    public void setValue(final Value value) {
-        if (valueCallback != null)
-            this.defaultValue = this.valueCallback.supply();
-
-        this.valueChanger.accept(value);
     }
 
     public Value getValue() {
         return this.valueCallback.supply();
     }
 
+    public void setValue(final Value value) {
+        if (valueCallback != null) this.defaultValue = this.valueCallback.supply();
+        this.valueChanger.accept(value);
+    }
+
     public void reset() {
         this.valueChanger.accept(this.defaultValue);
     }
-
 }

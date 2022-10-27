@@ -1,12 +1,11 @@
 package io.nicky.client.base.units;
 
 public final class Counter {
-
     private final int baseValue;
 
     private int count;
 
-    public Counter(int baseValue) {
+    public Counter(final int baseValue) {
         this.baseValue = baseValue;
         this.count = baseValue;
     }
@@ -22,5 +21,4 @@ public final class Counter {
     public void reset() {
         this.count = baseValue;
     }
-
 }

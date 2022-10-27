@@ -7,7 +7,5 @@ import java.lang.annotation.*;
 @Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Rewrite {
-
     String method();
-
 }
