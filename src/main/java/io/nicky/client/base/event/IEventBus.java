@@ -2,6 +2,7 @@ package io.nicky.client.base.event;
 
 import io.nicky.client.base.interfaces.Callback;
 import io.nicky.client.base.interfaces.Supplier;
+import io.nicky.client.base.module.Module;
 
 /**
  * The interface Event bus.
@@ -26,6 +27,15 @@ public interface IEventBus {
      * @param event   the event
      */
     <T extends Event> void registerListener(Class<T> element, Callback<T> event);
+
+    /**
+     * Register listener.
+     *
+     * @param <T>     the type parameter
+     * @param element the element
+     * @param event   the event
+     */
+    <T extends Event> void registerListener(Class<T> element, final Module module, Callback<T> event);
 
     /**
      * Release event t.

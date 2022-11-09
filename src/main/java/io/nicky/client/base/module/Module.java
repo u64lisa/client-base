@@ -1,5 +1,7 @@
 package io.nicky.client.base.module;
 
+import io.nicky.client.base.event.EventBus;
+import io.nicky.client.base.event.IEventBus;
 import io.nicky.client.base.event.defaults.ModuleInitializeEvent;
 import io.nicky.client.base.mapping.MappedValue;
 import io.nicky.client.base.module.exceptions.ModuleInitializeException;
@@ -24,6 +26,8 @@ public abstract class Module {
             .setUpdateMethod(element -> this.bindInternal = element)
             .build();
 
+    private IEventBus eventBus;
+
     /**
      * Initialize.
      *
@@ -36,11 +40,13 @@ public abstract class Module {
         if (descriptor == null)
             throw new ModuleInitializeException(this);
 
+        this.eventBus = moduleManager.getEventBus();
+
         moduleManager
                 .registerNamed(this, descriptor);
 
         moduleManager.getSettingsManager()
-                .registerSettings(this);
+                .registerSettings(this.getClass(), this);
 
         moduleManager
                 .getEventBus()
@@ -60,12 +66,14 @@ public abstract class Module {
     /**
      * Activate.
      */
-    public void activate() {}
+    public void activate() {
+    }
 
     /**
      * Deactivate.
      */
-    public void deactivate() {}
+    public void deactivate() {
+    }
 
     /**
      * Is active boolean.
@@ -92,6 +100,10 @@ public abstract class Module {
      */
     public void setBind(int bind) {
         this.bind.setValue(bind);
+    }
+
+    public IEventBus getEventBus() {
+        return eventBus;
     }
 
 }
