@@ -69,11 +69,8 @@ public final class ExampleModule extends Module {
 
     @Override
     public void activate() {
-        this.getEventBus().registerListener(ModuleInitializeEvent.class, this, event -> {
-
-            System.out.println("event called owo");
-
-        });
+        this.getEventBus().registerListener(ModuleInitializeEvent.class,
+                this, event -> System.out.println("event called owo"));
     }
 
 }
